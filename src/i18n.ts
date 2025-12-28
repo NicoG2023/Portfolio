@@ -1,0 +1,161 @@
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+
+const resources = {
+  es: {
+    translation: {
+      hero: {
+        badge: "Disponible para proyectos",
+        headlineA: "Construyo productos",
+        headlineB: "con ingeniería y datos",
+        subtitle:
+          "Portafolio de proyectos en backend, frontend y data. Enfoque en calidad, claridad y resultados medibles.",
+        ctaPrimary: "Ver proyectos",
+        ctaSecondary: "Contactarme",
+        chips: {
+          one: "React + Vite",
+          two: "Backend / APIs",
+          three: "Data & Analytics",
+          four: "Cloud & Docker",
+        },
+        cardTitle: "Resumen rápido",
+        cardBody:
+          "Proyectos con arquitectura limpia, microservicios cuando aplica, y experiencia integrando UI moderna con servicios robustos.",
+        cardMetric1Label: "Enfoque",
+        cardMetric1Value: "Producto & Delivery",
+        cardMetric2Label: "Stack",
+        cardMetric2Value: "React • Node/Java • Cloud",
+        scroll: "Desliza para ver más",
+      },
+      site: { brand: "Nicolás Guevara" },
+      nav: { projects: "Proyectos", contact: "Contacto" },
+      projects: {
+        title: "Proyectos",
+        subtitle: "Selección curada de proyectos destacados y trabajo reciente.",
+        filters: {
+          all: "Todos",
+          software: "Software",
+          data: "Data",
+          consulting: "Consultoría",
+        },
+      },
+      project: {
+        back: "Volver a proyectos",
+        backHome: "Volver al inicio",
+        notFound: "No encontré este proyecto.",
+        stack: "Stack",
+        links: "Enlaces",
+        problem: "Problema",
+        solution: "Solución",
+        impact: "Impacto",
+        role: "Mi rol",
+        todo: "Pendiente: completar esta sección con contenido del proyecto.",
+      },
+      contact: {
+        title: "Hablemos",
+        subtitle: "¿Tienes una oportunidad, proyecto o idea? Escríbeme y te respondo lo más pronto posible.",
+        ctaEmail: "Enviar email",
+        copy: "Copiar email",
+        copied: "Copiado",
+        copyFallback: "Copia este email:",
+        quickTitle: "Info rápida",
+        quick1: "Disponible para proyectos freelance y roles full-time.",
+        quick2: "Interesada en software, data y producto.",
+        quick3: "Trabajo remoto o híbrido.",
+        emailLabel: "Email",
+        linksTitle: "Links",
+        linksBody: "Encuéntrame aquí (o descarga mi CV).",
+        linkedin: "LinkedIn",
+        linkedinHint: "Experiencia y background",
+        github: "GitHub",
+        githubHint: "Código y repositorios",
+        resume: "CV / Resume",
+        resumeHint: "PDF (una página)",
+        footerNote: "Tip: si me escribes, incluye contexto y links para responder más rápido.",
+      },
+    },
+  },
+  en: {
+    translation: {
+      hero: {
+        badge: "Open to projects",
+        headlineA: "I build products",
+        headlineB: "with engineering and data",
+        subtitle:
+          "Portfolio of backend, frontend and data projects. Focused on quality, clarity, and measurable outcomes.",
+        ctaPrimary: "View projects",
+        ctaSecondary: "Contact me",
+        chips: {
+          one: "React + Vite",
+          two: "Backend / APIs",
+          three: "Data & Analytics",
+          four: "Cloud & Docker",
+        },
+        cardTitle: "Quick snapshot",
+        cardBody:
+          "Projects with clean architecture, microservices when needed, and modern UI integrated with robust services.",
+        cardMetric1Label: "Focus",
+        cardMetric1Value: "Product & Delivery",
+        cardMetric2Label: "Stack",
+        cardMetric2Value: "React • Node/Java • Cloud",
+        scroll: "Scroll to explore",
+      },
+      site: { brand: "Nicolás Guevara" },
+      nav: { projects: "Projects", contact: "Contact" },
+      projects: {
+        title: "Projects",
+        subtitle: "A curated selection of featured work and recent projects.",
+        filters: {
+          all: "All",
+          software: "Software",
+          data: "Data",
+          consulting: "Consulting",
+        },
+      },
+      project: {
+        back: "Back to projects",
+        backHome: "Back home",
+        notFound: "Project not found.",
+        stack: "Stack",
+        links: "Links",
+        problem: "Problem",
+        solution: "Solution",
+        impact: "Impact",
+        role: "My role",
+        todo: "TODO: fill this section with project details.",
+      },
+      contact: {
+        title: "Let’s connect",
+        subtitle: "Got an opportunity, project, or idea? Email me — I’ll get back to you soon.",
+        ctaEmail: "Send email",
+        copy: "Copy email",
+        copied: "Copied",
+        copyFallback: "Copy this email:",
+        quickTitle: "Quick info",
+        quick1: "Available for freelance projects and full-time roles.",
+        quick2: "Interested in software, data, and product work.",
+        quick3: "Remote or hybrid.",
+        emailLabel: "Email",
+        linksTitle: "Links",
+        linksBody: "Find me here (or download my resume).",
+        linkedin: "LinkedIn",
+        linkedinHint: "Experience & background",
+        github: "GitHub",
+        githubHint: "Code & repositories",
+        resume: "CV / Resume",
+        resumeHint: "PDF (one page)",
+        footerNote: "Tip: include context and links so I can respond faster.",
+      },
+    },
+  },
+};
+
+
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "es",
+  fallbackLng: "en",
+  interpolation: { escapeValue: false },
+});
+
+export default i18n;
