@@ -1,26 +1,30 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 type CopyState = "idle" | "copied";
 
 export default function ContactSection() {
   const { t, i18n } = useTranslation();
-  const lang = i18n.language.startsWith("es") ? "es" : "en";
+  const reduceMotion = useReducedMotion();
 
+  const lang = i18n.language.startsWith("es") ? "es" : "en";
   const email = "nicoguehe@gmail.com";
+
   const [copyState, setCopyState] = useState<CopyState>("idle");
 
-  const subject = useMemo(() => {
-    return lang === "es"
-      ? "Contacto desde tu portafolio"
-      : "Contact from your portfolio";
-  }, [lang]);
+  const subject = lang === "es" ? "Contacto desde tu portafolio" : "Contact from your portfolio";
+
+  // ✅ opcional: un body corto para guiar a quien te escribe
+  const body =
+    lang === "es"
+      ? "Hola Nicolás,\n\nVi tu portafolio y quiero hablar sobre...\n\nContexto / links:\n- \n\nGracias,"
+      : "Hi Nicolás,\n\nI saw your portfolio and I'd like to discuss...\n\nContext / links:\n- \n\nThanks,";
 
   const mailto = useMemo(() => {
-    const params = new URLSearchParams({ subject });
+    const params = new URLSearchParams({ subject, body });
     return `mailto:${email}?${params.toString()}`;
-  }, [email, subject]);
+  }, [email, subject, body]);
 
   async function onCopyEmail() {
     try {
@@ -28,6 +32,7 @@ export default function ContactSection() {
       setCopyState("copied");
       window.setTimeout(() => setCopyState("idle"), 1200);
     } catch {
+      // fallback: prompt (simple y universal)
       window.prompt(t("contact.copyFallback"), email);
     }
   }
@@ -43,7 +48,7 @@ export default function ContactSection() {
         }}
       />
 
-      {/* ✅ wash local MUY sutil (detrás) */}
+      {/* wash local MUY sutil (detrás) */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] -z-10">
         {/* LIGHT */}
         <div className="absolute inset-0 dark:hidden">
@@ -83,7 +88,7 @@ export default function ContactSection() {
         </div>
       </div>
 
-      {/* ✅ contenido SIEMPRE encima */}
+      {/* contenido SIEMPRE encima */}
       <div className="mx-auto max-w-5xl px-6 py-20 relative z-10">
         <div className="grid gap-10 md:grid-cols-12">
           {/* Left */}
@@ -117,25 +122,32 @@ export default function ContactSection() {
               className="mt-7 flex flex-wrap gap-3"
             >
               <motion.a
-                whileHover={{ y: -2 }}
+                whileHover={reduceMotion ? undefined : { y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 href={mailto}
                 className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-bg shadow-soft hover:opacity-95"
+                aria-label={lang === "es" ? "Enviar correo" : "Send email"}
               >
                 {t("contact.ctaEmail")}
               </motion.a>
 
               <motion.button
                 type="button"
-                whileHover={{ y: -2 }}
+                whileHover={reduceMotion ? undefined : { y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onCopyEmail}
                 className={[
                   "rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-text transition-colors",
                   "bg-surface/70 backdrop-blur-sm hover:bg-bg/50",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--bg))]",
                 ].join(" ")}
+                aria-label={lang === "es" ? "Copiar email" : "Copy email"}
               >
                 {copyState === "copied" ? t("contact.copied") : t("contact.copy")}
+                {/* ✅ feedback accesible */}
+                <span className="sr-only" aria-live="polite">
+                  {copyState === "copied" ? (lang === "es" ? "Email copiado" : "Email copied") : ""}
+                </span>
               </motion.button>
             </motion.div>
 
@@ -145,10 +157,7 @@ export default function ContactSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20% 0px" }}
               transition={{ duration: 0.45, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-              className={[
-                "mt-8 rounded-2xl border border-border p-6",
-                "bg-surface/75 backdrop-blur-md",
-              ].join(" ")}
+              className={["mt-8 rounded-2xl border border-border p-6", "bg-surface/75 backdrop-blur-md"].join(" ")}
             >
               <div className="text-sm font-semibold">{t("contact.quickTitle")}</div>
               <ul className="mt-3 space-y-2 text-sm text-muted">
@@ -159,7 +168,7 @@ export default function ContactSection() {
 
               <div className="mt-5 rounded-xl border border-border bg-bg/25 px-4 py-3 backdrop-blur-sm">
                 <div className="text-xs text-muted">{t("contact.emailLabel")}</div>
-                <div className="mt-1 font-mono text-sm text-text">{email}</div>
+                <div className="mt-1 font-mono text-sm text-text select-all">{email}</div>
               </div>
             </motion.div>
           </div>
@@ -171,10 +180,7 @@ export default function ContactSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-20% 0px" }}
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-              className={[
-                "rounded-2xl border border-border p-6 shadow-soft",
-                "bg-surface/75 backdrop-blur-md",
-              ].join(" ")}
+              className={["rounded-2xl border border-border p-6 shadow-soft", "bg-surface/75 backdrop-blur-md"].join(" ")}
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-semibold">{t("contact.linksTitle")}</h3>
@@ -190,7 +196,7 @@ export default function ContactSection() {
                   href="https://www.linkedin.com/in/nicol%C3%A1s-guevara-herr%C3%A1n-a959a82ab/"
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-xl border border-border bg-bg/25 px-4 py-3 text-sm text-text backdrop-blur-sm transition-colors hover:bg-surface/60"
+                  className="rounded-xl border border-border bg-bg/25 px-4 py-3 text-sm text-text backdrop-blur-sm transition-colors hover:bg-surface/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--bg))]"
                 >
                   <div className="font-medium">{t("contact.linkedin")}</div>
                   <div className="mt-1 text-xs text-muted">{t("contact.linkedinHint")}</div>
@@ -200,7 +206,7 @@ export default function ContactSection() {
                   href="https://github.com/NicoG2023"
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-xl border border-border bg-bg/25 px-4 py-3 text-sm text-text backdrop-blur-sm transition-colors hover:bg-surface/60"
+                  className="rounded-xl border border-border bg-bg/25 px-4 py-3 text-sm text-text backdrop-blur-sm transition-colors hover:bg-surface/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--bg))]"
                 >
                   <div className="font-medium">{t("contact.github")}</div>
                   <div className="mt-1 text-xs text-muted">{t("contact.githubHint")}</div>
@@ -210,7 +216,7 @@ export default function ContactSection() {
                   href="/resume.pdf"
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-xl border border-border bg-bg/25 px-4 py-3 text-sm text-text backdrop-blur-sm transition-colors hover:bg-surface/60"
+                  className="rounded-xl border border-border bg-bg/25 px-4 py-3 text-sm text-text backdrop-blur-sm transition-colors hover:bg-surface/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.6)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--bg))]"
                 >
                   <div className="font-medium">{t("contact.resume")}</div>
                   <div className="mt-1 text-xs text-muted">{t("contact.resumeHint")}</div>
@@ -222,7 +228,8 @@ export default function ContactSection() {
           </div>
         </div>
       </div>
-      {/* ✅ fade inferior final (mata la línea en DARK) */}
+
+      {/* fade inferior final */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-[-160px] h-96 blur-3xl opacity-90 -z-10"
         style={{

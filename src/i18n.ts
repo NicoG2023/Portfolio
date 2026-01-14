@@ -4,39 +4,39 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   es: {
     translation: {
+      // ES
       hero: {
         badge: "Disponible para proyectos",
-        headlineA: "Construyo productos",
-        headlineB: "con ingeniería y datos",
+        headlineA: "Construyo sistemas",
+        headlineB: "backend en Java y full-stack",
         subtitle:
-          "Portafolio de proyectos en backend, frontend y data. Enfoque en calidad, claridad y resultados medibles.",
+          "Portafolio de proyectos enfocados en APIs, arquitectura limpia, microservicios cuando aplica y entregas con impacto medible.",
         ctaPrimary: "Ver proyectos",
         ctaSecondary: "Contactarme",
         chips: {
-          one: "React + Vite",
-          two: "Backend / APIs",
-          three: "Data & Analytics",
-          four: "Cloud & Docker",
+          one: "Java • Spring/Quarkus",
+          two: "APIs REST • Seguridad",
+          three: "Microservicios • Eventos",
+          four: "Cloud • Docker",
         },
         cardTitle: "Resumen rápido",
         cardBody:
-          "Proyectos con arquitectura limpia, microservicios cuando aplica, y experiencia integrando UI moderna con servicios robustos.",
+          "Experiencia construyendo backends robustos: diseño de dominios, integraciones, observabilidad y buenas prácticas para producción.",
         cardMetric1Label: "Enfoque",
-        cardMetric1Value: "Producto & Delivery",
+        cardMetric1Value: "Backend & Arquitectura",
         cardMetric2Label: "Stack",
-        cardMetric2Value: "React • Node/Java • Cloud",
+        cardMetric2Value: "Java • PostgreSQL • Docker",
         scroll: "Desliza para ver más",
       },
       site: { brand: "Nicolás Guevara" },
       nav: { projects: "Proyectos", contact: "Contacto" },
       projects: {
         title: "Proyectos",
-        subtitle: "Selección curada de proyectos destacados y trabajo reciente.",
+        subtitle: "Selección curada de proyectos full-stack con fortaleza en backend (Java, APIs, arquitectura).",
         filters: {
           all: "Todos",
-          software: "Software",
-          data: "Data",
-          consulting: "Consultoría",
+          backend: "Backend",
+          fullstack: "Full-stack",
         },
       },
       project: {
@@ -60,7 +60,7 @@ const resources = {
         copyFallback: "Copia este email:",
         quickTitle: "Info rápida",
         quick1: "Disponible para proyectos freelance y roles full-time.",
-        quick2: "Interesada en software, data y producto.",
+        quick2: "Interesado en backend, full-stack y arquitectura.",
         quick3: "Trabajo remoto o híbrido.",
         emailLabel: "Email",
         linksTitle: "Links",
@@ -77,39 +77,39 @@ const resources = {
   },
   en: {
     translation: {
+      // EN
       hero: {
         badge: "Open to projects",
-        headlineA: "I build products",
-        headlineB: "with engineering and data",
+        headlineA: "I build systems",
+        headlineB: "Java backends and full-stack apps",
         subtitle:
-          "Portfolio of backend, frontend and data projects. Focused on quality, clarity, and measurable outcomes.",
+          "Portfolio focused on APIs, clean architecture, microservices when needed, and shipping with measurable impact.",
         ctaPrimary: "View projects",
         ctaSecondary: "Contact me",
         chips: {
-          one: "React + Vite",
-          two: "Backend / APIs",
-          three: "Data & Analytics",
-          four: "Cloud & Docker",
+          one: "Java • Spring/Quarkus",
+          two: "REST APIs • Security",
+          three: "Microservices • Events",
+          four: "Cloud • Docker",
         },
         cardTitle: "Quick snapshot",
         cardBody:
-          "Projects with clean architecture, microservices when needed, and modern UI integrated with robust services.",
+          "Experience building production-grade backends: domain design, integrations, observability, and strong engineering practices.",
         cardMetric1Label: "Focus",
-        cardMetric1Value: "Product & Delivery",
+        cardMetric1Value: "Backend & Architecture",
         cardMetric2Label: "Stack",
-        cardMetric2Value: "React • Node/Java • Cloud",
+        cardMetric2Value: "Java • PostgreSQL • Docker",
         scroll: "Scroll to explore",
       },
       site: { brand: "Nicolás Guevara" },
       nav: { projects: "Projects", contact: "Contact" },
       projects: {
         title: "Projects",
-        subtitle: "A curated selection of featured work and recent projects.",
+        subtitle: "A curated selection of full-stack projects with strong backend focus (Java, APIs, architecture).",
         filters: {
           all: "All",
-          software: "Software",
-          data: "Data",
-          consulting: "Consulting",
+          backend: "Backend",
+          fullstack: "Full-stack",
         },
       },
       project: {
@@ -133,7 +133,7 @@ const resources = {
         copyFallback: "Copy this email:",
         quickTitle: "Quick info",
         quick1: "Available for freelance projects and full-time roles.",
-        quick2: "Interested in software, data, and product work.",
+        quick2: "Interested in backend, full-stack, and architecture.",
         quick3: "Remote or hybrid.",
         emailLabel: "Email",
         linksTitle: "Links",

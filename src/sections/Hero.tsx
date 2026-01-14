@@ -22,7 +22,7 @@ export default function Hero() {
 
   return (
     <section className="relative overflow-visible bg-transparent">
-      {/* ✅ fade hacia la siguiente sección (sin costura) */}
+      {/* fade hacia la siguiente sección (sin costura) */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-[-80px] h-64 blur-2xl opacity-95"
         style={{
@@ -45,7 +45,6 @@ export default function Hero() {
                 className={[
                   "relative inline-flex items-center gap-2 rounded-full",
                   "border border-border px-3 py-1 text-xs font-medium text-text",
-                  // ✅ translúcido + blur para dejar pasar el background
                   "bg-surface/70 backdrop-blur-sm",
                 ].join(" ")}
               >

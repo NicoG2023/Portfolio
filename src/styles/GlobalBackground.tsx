@@ -1,7 +1,7 @@
 export function GlobalBackground() {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10 isolate">
-      {/* ✅ Capa base fija: textura/vignette (no se “acaba” en ninguna sección) */}
+      {/* Capa base fija: textura/vignette (no se “acaba” en ninguna sección) */}
       <div className="fixed inset-0">
         {/* LIGHT */}
         <div className="absolute inset-0 dark:hidden">
@@ -40,7 +40,7 @@ export function GlobalBackground() {
         </div>
       </div>
 
-      {/* ✅ Capa de blobs “larga”: manchas a lo largo del scroll */}
+      {/* Capa de blobs “larga”: manchas a lo largo del scroll */}
       <div className="absolute inset-x-0 top-0 min-h-[270vh] overflow-visible">
         {/* LIGHT blobs */}
         <div className="absolute inset-0 dark:hidden">

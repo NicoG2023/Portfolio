@@ -5,7 +5,7 @@ import { projects } from "../data/projects";
 import { ProjectCard } from "../components/ProjectCard";
 import { FeaturedProjectCard } from "../components/FeaturedProjectCard";
 
-type Filter = "all" | "software" | "data" | "consulting";
+type Filter = "all" | "backend" | "fullstack";
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -26,20 +26,26 @@ export default function ProjectsSection() {
 
   const filters: { key: Filter; label: string }[] = [
     { key: "all", label: t("projects.filters.all") },
-    { key: "software", label: t("projects.filters.software") },
-    { key: "data", label: t("projects.filters.data") },
-    { key: "consulting", label: t("projects.filters.consulting") },
+    { key: "backend", label: t("projects.filters.backend") },
+    { key: "fullstack", label: t("projects.filters.fullstack") },
   ];
 
-  const featured = useMemo(() => projects.filter((p) => p.featured), []);
+  const featured = useMemo(() => projects.filter((p) => p.featured), [projects]);
+
   const filtered = useMemo(() => {
     const base = filter === "all" ? projects : projects.filter((p) => p.category === filter);
-    return base.filter((p) => !p.featured);
-  }, [filter]);
+    // no duplicar featured
+    const rest = base.filter((p) => !p.featured);
+
+    // opcional: ordenar por año (si el year empieza con YYYY)
+    // si no quieres ordenar, borra este bloque
+    rest.sort((a, b) => (b.year ?? "").localeCompare(a.year ?? ""));
+
+    return rest;
+  }, [filter, projects]);
 
   return (
     <section id="projects" className="relative bg-transparent overflow-visible">
-      {/* ✅ fade superior (SIEMPRE detrás) */}
       <div
         className="pointer-events-none absolute inset-x-0 top-[-140px] h-80 blur-2xl opacity-90 -z-10"
         style={{
@@ -47,8 +53,6 @@ export default function ProjectsSection() {
             "linear-gradient(to top, transparent 0%, rgb(var(--bg)) 60%, rgb(var(--bg)) 100%)",
         }}
       />
-
-      {/* ✅ fade inferior (derrite Projects → Contact; SIEMPRE detrás) */}
       <div
         className="pointer-events-none absolute inset-x-0 bottom-[-140px] h-80 blur-2xl opacity-90 -z-10"
         style={{
@@ -57,7 +61,6 @@ export default function ProjectsSection() {
         }}
       />
 
-      {/* ✅ Wash local MUY sutil (detrás) */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] -z-10">
         {/* LIGHT */}
         <div className="absolute inset-0 dark:hidden">
@@ -97,7 +100,6 @@ export default function ProjectsSection() {
         </div>
       </div>
 
-      {/* ✅ contenido SIEMPRE encima */}
       <div className="mx-auto max-w-5xl px-6 py-20 relative z-10">
         <motion.div
           variants={container}
@@ -128,7 +130,6 @@ export default function ProjectsSection() {
             <motion.div variants={item} className="flex flex-wrap gap-2">
               {filters.map((f) => {
                 const active = f.key === filter;
-
                 return (
                   <button
                     key={f.key}
@@ -137,9 +138,7 @@ export default function ProjectsSection() {
                       "group relative rounded-full px-3 py-1 text-xs font-medium border transition-colors",
                       "border-border",
                       "backdrop-blur-sm",
-                      active
-                        ? "bg-primary text-bg"
-                        : "bg-surface/70 text-text hover:bg-bg/50",
+                      active ? "bg-primary text-bg" : "bg-surface/70 text-text hover:bg-bg/50",
                     ].join(" ")}
                   >
                     <span
@@ -159,7 +158,7 @@ export default function ProjectsSection() {
             </motion.div>
           </div>
 
-          {/* Featured */}
+          {/* Featured (siempre visible) */}
           {featured.length > 0 && (
             <motion.div variants={item} className="mt-10 grid gap-6 md:grid-cols-2">
               {featured.slice(0, 2).map((p) => (
