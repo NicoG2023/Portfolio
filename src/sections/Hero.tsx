@@ -21,15 +21,9 @@ export default function Hero() {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section className="relative overflow-visible bg-transparent">
-      {/* fade hacia la siguiente sección (sin costura) */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-[-80px] h-64 blur-2xl opacity-95"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent 0%, rgb(var(--bg)) 60%, rgb(var(--bg)) 100%)",
-        }}
-      />
+    <section className="relative overflow-visible bg-transparent cv-auto">
+      {/* ✅ Quitado: fade interno (ahora se maneja desde HomePage / PageFades) */}
+
       <div className="mx-auto max-w-5xl px-6 py-14 md:py-20">
         <motion.div
           variants={container}
@@ -37,15 +31,13 @@ export default function Hero() {
           animate="show"
           className="grid items-center gap-10 md:grid-cols-12"
         >
-          {/* LEFT */}
           <div className="md:col-span-7">
-            {/* Badge */}
             <motion.div variants={item} className="inline-flex items-center gap-2">
               <span
                 className={[
                   "relative inline-flex items-center gap-2 rounded-full",
-                  "border border-border px-3 py-1 text-xs font-medium text-text",
-                  "bg-surface/70 backdrop-blur-sm",
+                  "px-3 py-1 text-xs font-medium text-text",
+                  "glass",
                 ].join(" ")}
               >
                 <span
@@ -60,7 +52,6 @@ export default function Hero() {
               </span>
             </motion.div>
 
-            {/* Headline */}
             <motion.h1
               variants={item}
               className="mt-5 text-4xl font-semibold tracking-tight md:text-5xl"
@@ -82,13 +73,12 @@ export default function Hero() {
               {t("hero.subtitle")}
             </motion.p>
 
-            {/* CTAs */}
             <motion.div variants={item} className="mt-7 flex flex-wrap gap-3">
               <motion.a
                 whileHover={reduceMotion ? undefined : { y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 href="#projects"
-                className="group relative rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-bg shadow-soft"
+                className="group relative rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-bg shadow-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.55)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--bg))]"
               >
                 <span
                   className="pointer-events-none absolute -inset-[1px] -z-10 rounded-xl opacity-0 blur-md transition-opacity group-hover:opacity-80"
@@ -105,24 +95,22 @@ export default function Hero() {
                 whileTap={{ scale: 0.98 }}
                 href="#contact"
                 className={[
-                  "rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-text transition-colors",
-                  // ✅ translúcido para no crear “bloques” sólidos
-                  "bg-surface/70 backdrop-blur-sm hover:bg-bg/60",
+                  "rounded-xl px-5 py-2.5 text-sm font-medium text-text transition-colors",
+                  "glass hover:opacity-95",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.55)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--bg))]",
                 ].join(" ")}
               >
                 {t("hero.ctaSecondary")}
               </motion.a>
             </motion.div>
 
-            {/* Chips */}
             <motion.div variants={item} className="mt-7 flex flex-wrap gap-2">
               {["one", "two", "three", "four"].map((k) => (
                 <span
                   key={k}
                   className={[
-                    "relative rounded-full border border-border px-3 py-1 text-xs text-text",
-                    // ✅ translúcido + blur
-                    "bg-surface/65 backdrop-blur-sm",
+                    "relative rounded-full px-3 py-1 text-xs text-text",
+                    "glass",
                   ].join(" ")}
                 >
                   {t(`hero.chips.${k}`)}
@@ -131,30 +119,31 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* RIGHT CARD */}
           <div className="md:col-span-5">
             <motion.div
               variants={item}
               whileHover={reduceMotion ? undefined : { y: -4 }}
               transition={{ duration: 0.25 }}
               className={[
-                "relative overflow-hidden rounded-2xl border border-border p-6 shadow-soft",
-                // ✅ translúcido + blur para que el fondo siga continuo
-                "bg-surface/75 backdrop-blur-md",
+                "relative overflow-hidden rounded-2xl p-6 shadow-soft",
+                "glass",
               ].join(" ")}
             >
-              {/* subtle rim light */}
               <div
                 className="pointer-events-none absolute inset-x-0 top-0 h-24"
                 style={{
-                  background:
-                    "linear-gradient(180deg, rgb(var(--accent)/0.18), transparent)",
+                  background: "linear-gradient(180deg, rgb(var(--accent)/0.18), transparent)",
                 }}
               />
 
               <div className="relative flex items-center justify-between">
                 <h2 className="text-sm font-semibold">{t("hero.cardTitle")}</h2>
-                <span className="rounded-full border border-border bg-bg/30 px-2 py-1 font-mono text-[10px] text-muted backdrop-blur-sm">
+                <span
+                  className={[
+                    "rounded-full px-2 py-1 font-mono text-[10px] text-muted",
+                    "glass",
+                  ].join(" ")}
+                >
                   v1.0
                 </span>
               </div>
@@ -162,11 +151,11 @@ export default function Hero() {
               <p className="mt-3 text-sm text-muted">{t("hero.cardBody")}</p>
 
               <div className="mt-6 grid gap-3">
-                <div className="rounded-xl border border-border bg-bg/20 p-4 backdrop-blur-sm">
+                <div className={["rounded-xl p-4", "glass"].join(" ")}>
                   <div className="text-xs text-muted">{t("hero.cardMetric1Label")}</div>
                   <div className="mt-1 font-medium">{t("hero.cardMetric1Value")}</div>
                 </div>
-                <div className="rounded-xl border border-border bg-bg/20 p-4 backdrop-blur-sm">
+                <div className={["rounded-xl p-4", "glass"].join(" ")}>
                   <div className="text-xs text-muted">{t("hero.cardMetric2Label")}</div>
                   <div className="mt-1 font-medium">{t("hero.cardMetric2Value")}</div>
                 </div>
@@ -188,7 +177,6 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Scroll hint */}
         <motion.a
           href="#projects"
           initial={{ opacity: 0, y: 6 }}
@@ -197,7 +185,7 @@ export default function Hero() {
           className="mt-10 inline-flex items-center gap-3 text-sm text-muted"
         >
           <span>{t("hero.scroll")}</span>
-          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface/65 backdrop-blur-sm">
+          <span className={["flex h-9 w-9 items-center justify-center rounded-full", "glass"].join(" ")}>
             <ArrowDown className="h-4 w-4 text-[rgb(var(--accent))]" />
           </span>
         </motion.a>

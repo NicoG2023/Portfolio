@@ -30,75 +30,17 @@ export default function ProjectsSection() {
     { key: "fullstack", label: t("projects.filters.fullstack") },
   ];
 
-  const featured = useMemo(() => projects.filter((p) => p.featured), [projects]);
+  const featured = useMemo(() => projects.filter((p) => p.featured), []);
 
   const filtered = useMemo(() => {
     const base = filter === "all" ? projects : projects.filter((p) => p.category === filter);
-    // no duplicar featured
     const rest = base.filter((p) => !p.featured);
-
-    // opcional: ordenar por año (si el year empieza con YYYY)
-    // si no quieres ordenar, borra este bloque
     rest.sort((a, b) => (b.year ?? "").localeCompare(a.year ?? ""));
-
     return rest;
-  }, [filter, projects]);
+  }, [filter]);
 
   return (
-    <section id="projects" className="relative bg-transparent overflow-visible">
-      <div
-        className="pointer-events-none absolute inset-x-0 top-[-140px] h-80 blur-2xl opacity-90 -z-10"
-        style={{
-          background:
-            "linear-gradient(to top, transparent 0%, rgb(var(--bg)) 60%, rgb(var(--bg)) 100%)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-[-140px] h-80 blur-2xl opacity-90 -z-10"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent 0%, rgb(var(--bg)) 60%, rgb(var(--bg)) 100%)",
-        }}
-      />
-
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[520px] -z-10">
-        {/* LIGHT */}
-        <div className="absolute inset-0 dark:hidden">
-          <div
-            className="absolute left-1/2 top-[-220px] h-[520px] w-[980px] -translate-x-1/2 rounded-full blur-3xl opacity-35"
-            style={{
-              background:
-                "radial-gradient(circle at 50% 55%, rgb(var(--accent) / 0.22), transparent 70%)",
-            }}
-          />
-          <div
-            className="absolute left-[-220px] top-[60px] h-[480px] w-[480px] rounded-full blur-3xl opacity-18"
-            style={{
-              background:
-                "radial-gradient(circle at 55% 45%, rgb(var(--crimson) / 0.10), transparent 72%)",
-              mixBlendMode: "multiply",
-            }}
-          />
-        </div>
-
-        {/* DARK */}
-        <div className="absolute inset-0 hidden dark:block">
-          <div
-            className="absolute left-1/2 top-[-220px] h-[520px] w-[980px] -translate-x-1/2 rounded-full blur-3xl opacity-22"
-            style={{
-              background:
-                "radial-gradient(circle at 50% 50%, rgb(var(--accent) / 0.24), transparent 68%)",
-            }}
-          />
-          <div
-            className="absolute left-[-240px] top-[70px] h-[520px] w-[520px] rounded-full blur-3xl opacity-16"
-            style={{
-              background:
-                "radial-gradient(circle at 55% 45%, rgb(var(--crimson) / 0.10), transparent 70%)",
-            }}
-          />
-        </div>
-      </div>
+    <section id="projects" className="relative bg-transparent overflow-visible cv-auto">
 
       <div className="mx-auto max-w-5xl px-6 py-20 relative z-10">
         <motion.div
@@ -108,7 +50,6 @@ export default function ProjectsSection() {
           viewport={{ once: true, amount: 0.25 }}
           className="relative"
         >
-          {/* Header */}
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <motion.div variants={item}>
               <h2 className="text-2xl font-semibold tracking-tight">
@@ -126,10 +67,10 @@ export default function ProjectsSection() {
               <p className="mt-3 max-w-2xl text-muted">{t("projects.subtitle")}</p>
             </motion.div>
 
-            {/* Filters */}
             <motion.div variants={item} className="flex flex-wrap gap-2">
               {filters.map((f) => {
                 const active = f.key === filter;
+
                 return (
                   <button
                     key={f.key}
@@ -137,8 +78,8 @@ export default function ProjectsSection() {
                     className={[
                       "group relative rounded-full px-3 py-1 text-xs font-medium border transition-colors",
                       "border-border",
-                      "backdrop-blur-sm",
-                      active ? "bg-primary text-bg" : "bg-surface/70 text-text hover:bg-bg/50",
+                      active ? "bg-primary text-bg shadow-soft" : "glass text-text hover:opacity-95",
+                      "focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--accent)/0.55)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--bg))]",
                     ].join(" ")}
                   >
                     <span
@@ -158,7 +99,6 @@ export default function ProjectsSection() {
             </motion.div>
           </div>
 
-          {/* Featured (siempre visible) */}
           {featured.length > 0 && (
             <motion.div variants={item} className="mt-10 grid gap-6 md:grid-cols-2">
               {featured.slice(0, 2).map((p) => (
@@ -167,7 +107,6 @@ export default function ProjectsSection() {
             </motion.div>
           )}
 
-          {/* Rest */}
           <motion.div variants={item} className="mt-8 grid gap-6 md:grid-cols-2">
             {filtered.map((p) => (
               <motion.div

@@ -19,9 +19,9 @@ export function ProjectCard({
     <motion.article
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-      className="group rounded-2xl border border-border bg-surface p-6 shadow-soft"
+      viewport={{ once: true, amount: 0.35 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="group rounded-2xl border border-border p-6 shadow-soft glass"
     >
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -34,13 +34,11 @@ export function ProjectCard({
             </Link>
           </h3>
 
-          {project.year && (
-            <p className="mt-1 text-xs text-muted">{project.year}</p>
-          )}
+          {project.year && <p className="mt-1 text-xs text-muted">{project.year}</p>}
         </div>
 
         {project.featured && (
-          <span className="rounded-full border border-border bg-bg px-2 py-1 text-[10px] font-mono text-muted">
+          <span className="rounded-full border border-border bg-bg/25 px-2 py-1 text-[10px] font-mono text-muted">
             featured
           </span>
         )}
@@ -52,7 +50,7 @@ export function ProjectCard({
         {project.stack.map((s) => (
           <span
             key={s}
-            className="rounded-full border border-border bg-bg px-3 py-1 text-xs text-text"
+            className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-text"
           >
             {s}
           </span>

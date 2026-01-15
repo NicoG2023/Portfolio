@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { projects } from "../data/projects";
 import { Header } from "../components/Header";
 import { ProjectVideo } from "../components/ProjectVideo";
@@ -17,13 +17,28 @@ function linkLabel(label: "github" | "demo" | "doc") {
 export default function ProjectDetailPage() {
   const { id } = useParams();
   const { i18n, t } = useTranslation();
+  const reduceMotion = useReducedMotion();
   const lang = i18n.language.startsWith("es") ? "es" : "en";
+
+  const mainRef = useRef<HTMLElement | null>(null);
 
   const project = useMemo(() => projects.find((p) => p.id === id), [id]);
 
+  // Reading progress (barata; spring suave). En reduce motion, sin spring.
+  const { scrollYProgress } = useScroll({
+    target: mainRef,
+    offset: ["start 0.1", "end 0.9"],
+  });
+
+  const progress = useSpring(scrollYProgress, {
+    stiffness: reduceMotion ? 90 : 120,
+    damping: reduceMotion ? 30 : 25,
+    mass: 0.2,
+  });
+
   if (!project) {
     return (
-      <div className="min-h-screen text-text">
+      <div className="min-h-screen text-text bg-bg">
         <Header />
         <main className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-muted">{t("project.notFound")}</p>
@@ -42,32 +57,26 @@ export default function ProjectDetailPage() {
   const desc = project.description[lang];
   const video = project.media?.video;
   const images = project.media?.images ?? [];
-  const sectionIds = (project.sections ?? []).map((s) => s.id);
+
+  const sectionIds = useMemo(() => (project.sections ?? []).map((s) => s.id), [project.sections]);
   const activeSectionId = useScrollSpy(sectionIds);
-  const mainRef = useRef<HTMLElement | null>(null);
 
-    const { scrollYProgress } = useScroll({
-    target: mainRef,
-    offset: ["start 0.15", "end 0.85"],
-    });
-
-    const progress = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 25,
-    mass: 0.2,
-    });
+  const activeSectionTitle = useMemo(() => {
+    if (!project.sections?.length) return "";
+    return project.sections.find((s) => s.id === activeSectionId)?.title[lang] ?? "";
+  }, [project.sections, activeSectionId, lang]);
 
   return (
-    <div className="min-h-screen text-text">
+    <div className="min-h-screen text-text bg-bg">
       <Header />
 
-      {/* Reading progress bar */}
-        <div className="sticky top-0 z-[60] h-1 w-full bg-transparent">
+      {/* Reading progress bar (ligera) */}
+      <div className="sticky top-0 z-[60] h-1 w-full bg-transparent">
         <motion.div
-            style={{ scaleX: progress, transformOrigin: "0% 50%" }}
-            className="h-1 w-full bg-primary/70"
+          style={{ scaleX: progress, transformOrigin: "0% 50%" }}
+          className="h-1 w-full bg-primary/70"
         />
-        </div>
+      </div>
 
       <main ref={mainRef} className="mx-auto max-w-5xl px-6 py-12">
         {/* Breadcrumb */}
@@ -75,15 +84,15 @@ export default function ProjectDetailPage() {
           <Link to="/" className="text-sm text-muted hover:text-text transition-colors">
             ← {t("project.back")}
           </Link>
-          <span className="rounded-full border border-border bg-surface px-3 py-1 text-xs text-text">
+          <span className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-text">
             {project.category}
           </span>
         </div>
 
         {/* Title */}
         <motion.h1
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+          animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           className="mt-6 text-3xl font-semibold tracking-tight md:text-4xl"
         >
@@ -99,20 +108,18 @@ export default function ProjectDetailPage() {
 
         <p className="mt-6 max-w-3xl text-muted">{desc}</p>
 
-        {/* Scroll spy chip */}
+        {/* Scroll spy chip (sin backdrop-blur; usa glass) */}
         {project.sections?.length ? (
-        <div className="sticky top-[80px] z-40 mt-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-bg/80 px-3 py-1.5 text-xs text-muted backdrop-blur">
-            <span className="font-mono text-[10px] text-muted">section</span>
-            <span className="h-3 w-px bg-border" />
-            <span className="text-text font-medium">
-                {project.sections.find((s) => s.id === activeSectionId)?.title[lang] ?? ""}
-            </span>
+          <div className="sticky top-[80px] z-40 mt-6">
+            <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs glass">
+              <span className="font-mono text-[10px] text-muted">section</span>
+              <span className="h-3 w-px bg-border" />
+              <span className="text-text font-medium">{activeSectionTitle}</span>
             </div>
-        </div>
+          </div>
         ) : null}
 
-        {/* Links */}
+        {/* Links (usa glass para consistencia y mejor performance que blur) */}
         {project.links?.length ? (
           <div className="mt-6 flex flex-wrap gap-3">
             {project.links.map((l) => (
@@ -121,7 +128,7 @@ export default function ProjectDetailPage() {
                 href={l.href}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-text hover:bg-bg transition-colors"
+                className="rounded-xl px-4 py-2 text-sm font-medium text-text transition-colors glass hover:bg-bg/50"
               >
                 {linkLabel(l.label)}
               </a>
@@ -141,31 +148,35 @@ export default function ProjectDetailPage() {
 
         {/* Media */}
         {(video || images.length > 0) && (
-        <div className="mt-10 grid gap-6">
+          <div className="mt-10 grid gap-6">
             {video && <ProjectVideo video={video} lang={lang} />}
 
             {images.length > 0 && (
-            <div className="grid gap-6 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 {images.map((img) => (
-                <figure
-                    key={img.src}
-                    className="overflow-hidden rounded-2xl border border-border bg-surface"
-                >
-                    <img src={img.src} alt={img.alt[lang]} className="h-full w-full object-cover" />
+                  <figure key={img.src} className="overflow-hidden rounded-2xl border border-border glass">
+                    <img
+                      src={img.src}
+                      alt={img.alt[lang]}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <figcaption className="border-t border-border px-4 py-3 text-sm text-muted">
-                    {img.alt[lang]}
+                      {img.alt[lang]}
                     </figcaption>
-                </figure>
+                  </figure>
                 ))}
-            </div>
+              </div>
             )}
-        </div>
+          </div>
         )}
-        {/* Sections */}
+
+        {/* Sections (glass en vez de bg-surface; menos “bloque sólido” y sin blur) */}
         {project.sections?.length ? (
           <div className="mt-12 grid gap-6">
             {project.sections.map((s) => (
-              <section id={s.id} key={s.id} className="rounded-2xl border border-border bg-surface p-6">
+              <section key={s.id} id={s.id} className="rounded-2xl p-6 glass">
                 <h2 className="text-base font-semibold">{s.title[lang]}</h2>
                 <p className="mt-2 text-sm text-muted">{s.body[lang]}</p>
 
@@ -188,7 +199,7 @@ export default function ProjectDetailPage() {
             {project.stack.map((s) => (
               <span
                 key={s}
-                className="rounded-full border border-border bg-surface px-3 py-1 text-xs text-text"
+                className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-text"
               >
                 {s}
               </span>

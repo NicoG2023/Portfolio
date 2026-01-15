@@ -17,18 +17,18 @@ export function Header() {
         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className={[
           "border-b border-border",
-          "backdrop-blur supports-[backdrop-filter]:bg-bg/70",
-          "bg-bg/90", // fallback si no hay blur
+          "glass",
+          "bg-bg/92",
         ].join(" ")}
+        style={{
+          backgroundColor: scrolled ? "rgb(var(--surface) / 0.78)" : "rgb(var(--surface) / 0.70)",
+        }}
       >
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          
-          {/* Logo / name */}
           <a href="#top" className="font-semibold tracking-tight text-text">
             {t("site.brand")}
           </a>
 
-          {/* Nav + toggles */}
           <div className="flex items-center gap-2">
             <nav className="hidden items-center gap-1 md:flex">
               <a

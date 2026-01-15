@@ -19,11 +19,10 @@ export function FeaturedProjectCard({
     <motion.article
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, amount: 0.35 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="relative overflow-hidden rounded-2xl border border-border bg-surface p-6 shadow-soft"
+      className="relative overflow-hidden rounded-2xl border border-border p-6 shadow-soft glass"
     >
-      {/* Background accent (sutil, usando tokens) */}
       <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent/15 blur-3xl" />
 
       <div className="relative">
@@ -41,20 +40,19 @@ export function FeaturedProjectCard({
               </Link>
             </h3>
           </div>
-          <span className="rounded-full border border-border bg-bg px-2 py-1 text-[10px] font-mono text-muted">
+
+          <span className="rounded-full border border-border bg-bg/25 px-2 py-1 text-[10px] font-mono text-muted">
             {project.category}
           </span>
         </div>
 
-        <p className="mt-3 text-sm text-muted">
-          {project.description[lang]}
-        </p>
+        <p className="mt-3 text-sm text-muted">{project.description[lang]}</p>
 
         <div className="mt-4 flex flex-wrap gap-2">
           {project.stack.slice(0, 8).map((s) => (
             <span
               key={s}
-              className="rounded-full border border-border bg-bg px-3 py-1 text-xs text-text"
+              className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-text"
             >
               {s}
             </span>
