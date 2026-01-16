@@ -15,6 +15,8 @@ export function ProjectCard({
   project: Project;
   lang: "es" | "en";
 }) {
+  const clickable = project.detailEnabled !== false && !project.comingSoon;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 10 }}
@@ -26,15 +28,25 @@ export function ProjectCard({
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-base font-semibold tracking-tight text-text">
-            <Link
-              to={`/projects/${project.id}`}
-              className="hover:underline underline-offset-4 decoration-border hover:decoration-text"
-            >
-              {project.title[lang]}
-            </Link>
+            {clickable ? (
+              <Link
+                to={`/projects/${project.id}`}
+                className="hover:underline underline-offset-4 decoration-border hover:decoration-text"
+              >
+                {project.title[lang]}
+              </Link>
+            ) : (
+              <span className="cursor-default">{project.title[lang]}</span>
+            )}
           </h3>
 
           {project.year && <p className="mt-1 text-xs text-muted">{project.year}</p>}
+
+          {!clickable && (
+            <span className="mt-2 inline-flex items-center rounded-full border border-border bg-bg/25 px-2 py-1 text-[10px] font-mono text-muted">
+              {lang === "es" ? "En desarrollo" : "In progress"}
+            </span>
+          )}
         </div>
 
         {project.featured && (

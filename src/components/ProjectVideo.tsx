@@ -1,7 +1,8 @@
+// src/components/ProjectVideo.tsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Project } from "../data/projects";
 
-type ProjectVideoType = NonNullable<NonNullable<Project["media"]>["video"]>;
+type ProjectVideoType = NonNullable<NonNullable<Project["media"]>["videos"]>[number];
 
 function getYouTubeId(url: string) {
   try {
@@ -17,12 +18,12 @@ function getYouTubeId(url: string) {
     const v = u.searchParams.get("v");
     if (v && v.length === 11) return v;
 
-    // youtube.com/shorts/<id>  |  youtube.com/embed/<id>
+    // youtube.com/shorts/<id> or youtube.com/embed/<id>
     const parts = u.pathname.split("/").filter(Boolean);
     const idx = parts.findIndex((p) => p === "shorts" || p === "embed");
     if (idx >= 0 && parts[idx + 1]?.length === 11) return parts[idx + 1];
 
-    // fallback: cualquier segmento de 11 chars
+    // fallback: any 11-char token
     const m = url.match(/([0-9A-Za-z_-]{11})/);
     return m ? m[1] : null;
   } catch {
@@ -32,20 +33,14 @@ function getYouTubeId(url: string) {
 }
 
 function getVimeoId(url: string) {
-  // soporta vimeo.com/123, player.vimeo.com/video/123
+  // vimeo.com/123 or player.vimeo.com/video/123
   const m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   return m ? m[1] : null;
 }
 
-// Thumbnails (mejor UX sin cargar iframe)
 function youtubeThumb(id: string) {
-  // maxresdefault a veces 404; hqdefault casi siempre existe
+  // maxresdefault a veces no existe; hqdefault es confiable
   return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-}
-
-function vimeoThumb(_id: string) {
-  // Vimeo thumbnail requiere API o oEmbed. Aquí no inventamos.
-  return null;
 }
 
 export function ProjectVideo({
@@ -60,9 +55,8 @@ export function ProjectVideo({
   const meta = useMemo(() => {
     if (video.kind === "youtube") {
       const id = getYouTubeId(video.src);
-      if (!id) return { embed: null, thumb: null };
+      if (!id) return { embed: null as string | null, thumb: null as string | null };
 
-      // Params: modest branding, no related from other channels, etc.
       const params = new URLSearchParams({
         rel: "0",
         modestbranding: "1",
@@ -77,7 +71,7 @@ export function ProjectVideo({
 
     if (video.kind === "vimeo") {
       const id = getVimeoId(video.src);
-      if (!id) return { embed: null, thumb: null };
+      if (!id) return { embed: null as string | null, thumb: null as string | null };
 
       const params = new URLSearchParams({
         dnt: "1",
@@ -86,40 +80,40 @@ export function ProjectVideo({
         portrait: "0",
       });
 
+      // Nota: thumbnail de Vimeo normalmente requiere oEmbed/API.
       return {
         embed: `https://player.vimeo.com/video/${id}?${params.toString()}`,
-        thumb: vimeoThumb(id), // null por defecto
+        thumb: null,
       };
     }
 
-    return { embed: null, thumb: null };
+    return { embed: null as string | null, thumb: null as string | null };
   }, [video]);
 
-  // Lazy-load gate
+  // Lazy-load gate (click-to-load)
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const [shouldLoad, setShouldLoad] = useState(false);
+  const [isNear, setIsNear] = useState(false);
 
   useEffect(() => {
-    if (shouldLoad) return;
     const el = wrapRef.current;
-    if (!el) return;
+    if (!el || shouldLoad) return;
 
     const io = new IntersectionObserver(
       (entries) => {
         if (entries[0]?.isIntersecting) {
-          // Nota: NO cargamos automáticamente el iframe.
-          // Solo marcamos “visible”, y seguimos usando click para cargar si quieres.
-          // Si prefieres auto-cargar al entrar, cambia a setShouldLoad(true) aquí.
+          setIsNear(true); // útil para precargar thumb en el futuro
+          io.disconnect();
         }
       },
-      { rootMargin: "200px 0px" }
+      { rootMargin: "250px 0px" }
     );
 
     io.observe(el);
     return () => io.disconnect();
   }, [shouldLoad]);
 
-  // MP4 (ideal si quieres máximo performance)
+  // MP4: ideal performance
   if (video.kind === "mp4") {
     return (
       <div className="overflow-hidden rounded-2xl border border-border bg-surface">
@@ -127,8 +121,8 @@ export function ProjectVideo({
           controls
           preload="metadata"
           playsInline
-          className="w-full"
-          // opcional si quieres limitar descargas:
+          className="w-full aspect-video"
+          // Si quieres limitar opciones:
           // controlsList="nodownload noplaybackrate"
         >
           <source src={video.src} type="video/mp4" />
@@ -142,7 +136,7 @@ export function ProjectVideo({
 
   return (
     <div ref={wrapRef} className="overflow-hidden rounded-2xl border border-border bg-surface">
-      <div className="aspect-video w-full">
+      <div className="aspect-video w-full min-h-[180px]">
         {shouldLoad ? (
           <iframe
             className="h-full w-full"
@@ -160,16 +154,16 @@ export function ProjectVideo({
             className="relative flex h-full w-full items-center justify-center bg-bg text-text"
             aria-label={lang === "es" ? "Cargar video" : "Load video"}
           >
-            {/* Thumbnail si existe */}
+            {/* Thumbnail si existe (YouTube) */}
             {meta.thumb ? (
               <>
                 <img
                   src={meta.thumb}
                   alt={title}
                   className="absolute inset-0 h-full w-full object-cover opacity-90"
-                  loading="lazy"
+                  loading={isNear ? "eager" : "lazy"}
+                  decoding="async"
                 />
-                {/* overlay suave para legibilidad */}
                 <div className="absolute inset-0 bg-black/35" />
               </>
             ) : (

@@ -30,7 +30,7 @@ export default function ProjectsSection() {
     { key: "fullstack", label: t("projects.filters.fullstack") },
   ];
 
-  const featured = useMemo(() => projects.filter((p) => p.featured), []);
+  const featured = projects.filter((p) => p.featured);
 
   const filtered = useMemo(() => {
     const base = filter === "all" ? projects : projects.filter((p) => p.category === filter);

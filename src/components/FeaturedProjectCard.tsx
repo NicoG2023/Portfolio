@@ -15,6 +15,8 @@ export function FeaturedProjectCard({
   project: Project;
   lang: "es" | "en";
 }) {
+  const clickable = project.detailEnabled !== false && !project.comingSoon;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 12 }}
@@ -31,14 +33,27 @@ export function FeaturedProjectCard({
             <p className="text-xs text-muted">
               {project.year ?? ""} {project.year ? "•" : ""} Featured
             </p>
-            <h3 className="mt-2 text-xl font-semibold tracking-tight text-text">
-              <Link
-                to={`/projects/${project.id}`}
-                className="hover:underline underline-offset-4 decoration-border hover:decoration-text"
-              >
-                {project.title[lang]}
-              </Link>
-            </h3>
+
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <h3 className="text-xl font-semibold tracking-tight text-text">
+                {clickable ? (
+                  <Link
+                    to={`/projects/${project.id}`}
+                    className="hover:underline underline-offset-4 decoration-border hover:decoration-text"
+                  >
+                    {project.title[lang]}
+                  </Link>
+                ) : (
+                  <span className="cursor-default">{project.title[lang]}</span>
+                )}
+              </h3>
+
+              {!clickable && (
+                <span className="inline-flex items-center rounded-full border border-border bg-bg/25 px-2 py-1 text-[10px] font-mono text-muted">
+                  {lang === "es" ? "En desarrollo" : "In progress"}
+                </span>
+              )}
+            </div>
           </div>
 
           <span className="rounded-full border border-border bg-bg/25 px-2 py-1 text-[10px] font-mono text-muted">

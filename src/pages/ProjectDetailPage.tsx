@@ -1,3 +1,4 @@
+// src/pages/ProjectDetailPage.tsx
 import { useMemo, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -24,7 +25,7 @@ export default function ProjectDetailPage() {
 
   const project = useMemo(() => projects.find((p) => p.id === id), [id]);
 
-  // Reading progress (barata; spring suave). En reduce motion, sin spring.
+  // Reading progress
   const { scrollYProgress } = useScroll({
     target: mainRef,
     offset: ["start 0.1", "end 0.9"],
@@ -38,7 +39,7 @@ export default function ProjectDetailPage() {
 
   if (!project) {
     return (
-      <div className="min-h-screen text-text bg-bg">
+      <div className="min-h-screen text-text bg-transparent">
         <Header />
         <main className="mx-auto max-w-5xl px-6 py-16">
           <p className="text-muted">{t("project.notFound")}</p>
@@ -53,9 +54,33 @@ export default function ProjectDetailPage() {
     );
   }
 
+  const blocked = project.detailEnabled === false || project.comingSoon;
+
+  if (blocked) {
+    return (
+      <div className="min-h-screen text-text bg-transparent">
+        <Header />
+        <main className="mx-auto max-w-5xl px-6 py-16">
+          <h1 className="text-2xl font-semibold">{project.title[lang]}</h1>
+          <p className="mt-3 text-muted">
+            {lang === "es"
+              ? "Este proyecto está en desarrollo. Pronto publicaré más detalles."
+              : "This project is in progress. More details coming soon."}
+          </p>
+          <Link
+            to="/"
+            className="mt-6 inline-block text-sm font-medium text-text underline decoration-border underline-offset-4 hover:decoration-text"
+          >
+            ← {t("project.back")}
+          </Link>
+        </main>
+      </div>
+    );
+  }
+
   const title = project.title[lang];
   const desc = project.description[lang];
-  const video = project.media?.video;
+  const videos = project.media?.videos ?? [];
   const images = project.media?.images ?? [];
 
   const sectionIds = useMemo(() => (project.sections ?? []).map((s) => s.id), [project.sections]);
@@ -67,10 +92,10 @@ export default function ProjectDetailPage() {
   }, [project.sections, activeSectionId, lang]);
 
   return (
-    <div className="min-h-screen text-text bg-bg">
+    <div className="min-h-screen text-text bg-transparent">
       <Header />
 
-      {/* Reading progress bar (ligera) */}
+      {/* Reading progress bar */}
       <div className="sticky top-0 z-[60] h-1 w-full bg-transparent">
         <motion.div
           style={{ scaleX: progress, transformOrigin: "0% 50%" }}
@@ -108,7 +133,7 @@ export default function ProjectDetailPage() {
 
         <p className="mt-6 max-w-3xl text-muted">{desc}</p>
 
-        {/* Scroll spy chip (sin backdrop-blur; usa glass) */}
+        {/* Scroll spy chip */}
         {project.sections?.length ? (
           <div className="sticky top-[80px] z-40 mt-6">
             <div className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs glass">
@@ -119,7 +144,7 @@ export default function ProjectDetailPage() {
           </div>
         ) : null}
 
-        {/* Links (usa glass para consistencia y mejor performance que blur) */}
+        {/* Links */}
         {project.links?.length ? (
           <div className="mt-6 flex flex-wrap gap-3">
             {project.links.map((l) => (
@@ -147,21 +172,34 @@ export default function ProjectDetailPage() {
         ) : null}
 
         {/* Media */}
-        {(video || images.length > 0) && (
-          <div className="mt-10 grid gap-6">
-            {video && <ProjectVideo video={video} lang={lang} />}
+        {(videos.length > 0 || images.length > 0) && (
+          <div className="mt-10 grid gap-8">
+            {videos.length > 0 && (
+              <div className="grid gap-8">
+                {videos.map((v) => (
+                  <div key={v.src} className="mx-auto w-full max-w-4xl">
+                    <ProjectVideo video={v} lang={lang} />
+                  </div>
+                ))}
+              </div>
+            )}
 
             {images.length > 0 && (
               <div className="grid gap-6 md:grid-cols-2">
                 {images.map((img) => (
-                  <figure key={img.src} className="overflow-hidden rounded-2xl border border-border glass">
-                    <img
-                      src={img.src}
-                      alt={img.alt[lang]}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                  <figure
+                    key={img.src}
+                    className="overflow-hidden rounded-2xl border border-border glass"
+                  >
+                    <div className="aspect-video w-full">
+                      <img
+                        src={img.src}
+                        alt={img.alt[lang]}
+                        className="h-full w-full object-contain bg-bg"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
                     <figcaption className="border-t border-border px-4 py-3 text-sm text-muted">
                       {img.alt[lang]}
                     </figcaption>
@@ -171,8 +209,7 @@ export default function ProjectDetailPage() {
             )}
           </div>
         )}
-
-        {/* Sections (glass en vez de bg-surface; menos “bloque sólido” y sin blur) */}
+        {/* Sections */}
         {project.sections?.length ? (
           <div className="mt-12 grid gap-6">
             {project.sections.map((s) => (
@@ -197,10 +234,7 @@ export default function ProjectDetailPage() {
           <h2 className="text-sm font-semibold">{t("project.stack")}</h2>
           <div className="mt-3 flex flex-wrap gap-2">
             {project.stack.map((s) => (
-              <span
-                key={s}
-                className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-text"
-              >
+              <span key={s} className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-text">
                 {s}
               </span>
             ))}

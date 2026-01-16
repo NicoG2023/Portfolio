@@ -16,6 +16,8 @@ export type Project = {
   metrics?: ProjectMetric[];
   sections?: ProjectSection[];
   media?: ProjectMedia;
+  comingSoon?: boolean;
+  detailEnabled?: boolean;
 };
 
 export type ProjectMetric = {
@@ -40,12 +42,14 @@ export type ProjectSection = {
 
 export type ProjectMedia = {
   images?: { src: string; alt: { es: string; en: string } }[];
-  video?: {
+  videos?: {
     kind: "youtube" | "vimeo" | "mp4";
     src: string;
     title: { es: string; en: string };
-  };
+  }[];
 };
+
+
 
 export const projects: Project[] = [
   // =========================
@@ -67,22 +71,22 @@ export const projects: Project[] = [
       en: "Backend & full-stack (API design, microservices, testing, UI)",
     },
     duration: { es: "—", en: "—" },
-    stack: ["Java (Quarkus)", "Python (Flask)", "React", "PostgreSQL", "Docker", "Testing"],
+    stack: ["Java (Quarkus)", "Python (Flask)", "React", "PostgreSQL", "Docker", "Testing", "CI/CD"],
     links: [{ label: "github", href: "https://github.com/NicoG2023/Cinema-Management-System" }],
     metrics: [
-      {
-        label: { es: "Arquitectura", en: "Architecture" },
-        value: { es: "2 microservicios", en: "2 microservices" },
-      },
-      {
-        label: { es: "Testing", en: "Testing" },
-        value: { es: "Unit • Stress • Acceptance", en: "Unit • Stress • Acceptance" },
-      },
-      {
-        label: { es: "UI", en: "UI" },
-        value: { es: "React", en: "React" },
-      },
+      { label: { es: "Arquitectura", en: "Architecture" }, value: { es: "2 microservicios", en: "2 microservices" } },
+      { label: { es: "Testing", en: "Testing" }, value: { es: "Unit • Stress • Acceptance", en: "Unit • Stress • Acceptance" } },
+      { label: { es: "UI", en: "UI" }, value: { es: "React", en: "React" } },
     ],
+    media: {
+      videos: [
+        {
+          kind: "mp4",
+          src: "/videos/cinema/CinemaManagementSystem.mp4",
+          title: { es: "Demo del sistema", en: "System demo" },
+        },
+      ],
+    },
     sections: [
       {
         id: "overview",
@@ -144,10 +148,7 @@ export const projects: Project[] = [
     featured: true,
     year: "2024–2025",
     category: "fullstack",
-    title: {
-      es: "App de Quices de Probabilidad (crear y calificar)",
-      en: "Probability Quizzes App (create & grade)",
-    },
+    title: { es: "App de Quices de Probabilidad (crear y calificar)", en: "Probability Quizzes App (create & grade)" },
     description: {
       es: "Aplicación full-stack en Quarkus + React para crear, presentar y calificar quices. Incluye autenticación/autorización con Keycloak.",
       en: "Full-stack app in Quarkus + React to create, take, and grade quizzes. Includes auth/authz with Keycloak.",
@@ -164,6 +165,15 @@ export const projects: Project[] = [
       { label: { es: "Tipo", en: "Type" }, value: { es: "Full-stack", en: "Full-stack" } },
       { label: { es: "Enfoque", en: "Focus" }, value: { es: "Proyecto completo", en: "End-to-end build" } },
     ],
+    media: {
+      videos: [
+        {
+          kind: "mp4",
+          src: "/videos/quizzes/AppProbabilidad.mp4",
+          title: { es: "Demo de la app", en: "App demo" },
+        },
+      ],
+    },
     sections: [
       {
         id: "overview",
@@ -194,58 +204,32 @@ export const projects: Project[] = [
 
   {
     id: "access-platform",
-    featured: true,
+    featured: false,
     year: "2025",
     category: "fullstack",
-    title: {
-      es: "Plataforma de control de acceso (Reconocimiento facial)",
-      en: "Access Control Platform (Face Recognition)",
-    },
+    title: { es: "Plataforma de control de acceso (Reconocimiento facial)", en: "Access Control Platform (Face Recognition)" },
     description: {
       es: "Plataforma full-stack en Quarkus + React: monolito modular + microservicio, decisiones por eventos con Kafka, seguridad con Keycloak y observabilidad con Prometheus, Grafana y Alertmanager.",
       en: "Full-stack platform in Quarkus + React: modular monolith + microservice, event-driven decisions with Kafka, security with Keycloak, and observability with Prometheus, Grafana, and Alertmanager.",
     },
+    comingSoon: true,
+    detailEnabled: false,
     role: {
       es: "Full-stack (arquitectura, backend Quarkus, observabilidad, integración frontend)",
       en: "Full-stack (architecture, Quarkus backend, observability, frontend integration)",
     },
     duration: { es: "3 meses", en: "3 months" },
-    stack: [
-      "Java (Quarkus)",
-      "React",
-      "Keycloak",
-      "Kafka",
-      "PostgreSQL",
-      "Prometheus",
-      "Grafana",
-      "Alertmanager",
-      "Docker",
-    ],
+    stack: ["Java (Quarkus)", "React", "Keycloak", "Kafka", "PostgreSQL", "Prometheus", "Grafana", "Alertmanager", "Docker", "CI/CD"],
     links: [
-      // si aún no está el repo público, deja "#"
       { label: "github", href: "https://github.com/tuusuario/tu-repo" },
       { label: "demo", href: "https://tu-demo.vercel.app" },
     ],
     metrics: [
-      {
-        label: { es: "Arquitectura", en: "Architecture" },
-        value: { es: "Monolito modular + microservicio", en: "Modular monolith + microservice" },
-      },
-      {
-        label: { es: "Eventos", en: "Events" },
-        value: { es: "Kafka (event-driven)", en: "Kafka (event-driven)" },
-      },
-      {
-        label: { es: "Observabilidad", en: "Observability" },
-        value: { es: "Prometheus + Grafana + Alertmanager", en: "Prometheus + Grafana + Alertmanager" },
-      },
+      { label: { es: "Arquitectura", en: "Architecture" }, value: { es: "Monolito modular + microservicio", en: "Modular monolith + microservice" } },
+      { label: { es: "Eventos", en: "Events" }, value: { es: "Kafka (event-driven)", en: "Kafka (event-driven)" } },
+      { label: { es: "Observabilidad", en: "Observability" }, value: { es: "Prometheus + Grafana + Alertmanager", en: "Prometheus + Grafana + Alertmanager" } },
     ],
     media: {
-      video: {
-        kind: "youtube",
-        src: "https://www.youtube.com/watch?v=TU_VIDEO_ID",
-        title: { es: "Demo del sistema", en: "System demo" },
-      },
       images: [
         { src: "/images/access-1.png", alt: { es: "Pantalla principal", en: "Main screen" } },
         { src: "/images/access-2.png", alt: { es: "Historial de accesos", en: "Access history" } },
@@ -291,7 +275,6 @@ export const projects: Project[] = [
   // REST (NON-FEATURED)
   // =========================
 
-  // ✅ DiagSEG (ASNs-Security y DiagSEG son el mismo proyecto)
   {
     id: "diagseg",
     year: "2025",
@@ -308,6 +291,15 @@ export const projects: Project[] = [
     duration: { es: "—", en: "—" },
     stack: ["Java (Quarkus)", "Vue", "PostgreSQL", "Docker", "Integrations"],
     links: [{ label: "github", href: "https://github.com/EngJuanSER/ASNs-Security/tree/main/Proyect" }],
+    media: {
+      videos: [
+        {
+          kind: "mp4",
+          src: "/videos/diagseg/DiagSeg.mp4",
+          title: { es: "Demo de DiagSEG", en: "DiagSEG demo" },
+        },
+      ],
+    },
     sections: [
       {
         id: "overview",
@@ -337,13 +329,29 @@ export const projects: Project[] = [
       es: "Plataforma e-commerce con microservicios en Express, comunicación por eventos con Kafka y frontend en React.",
       en: "E-commerce platform with Express microservices, Kafka event-driven communication, and a React frontend.",
     },
-    role: {
-      es: "Full-stack (microservicios, eventos, UI)",
-      en: "Full-stack (microservices, events, UI)",
-    },
+    role: { es: "Full-stack (microservicios, eventos, UI)", en: "Full-stack (microservices, events, UI)" },
     duration: { es: "—", en: "—" },
     stack: ["Node.js (Express)", "Kafka", "React", "PostgreSQL", "Docker"],
     links: [{ label: "github", href: "https://github.com/NicoG2023/Artesanias_Bogota_Ltda" }],
+    media: {
+      videos: [
+        {
+          kind: "mp4",
+          src: "/videos/artesanias/ArtesaniasBogota.mp4",
+          title: { es: "Demo general", en: "General demo" },
+        },
+        {
+          kind: "mp4",
+          src: "/videos/artesanias/ArtesaniasBogota-cliente.mp4",
+          title: { es: "Video demo para caso cliente", en: "Client flow demo video" },
+        },
+        {
+          kind: "mp4",
+          src: "/videos/artesanias/ArtesaniasBogota-staff.mp4",
+          title: { es: "Video demo para caso staff", en: "Staff flow demo video" },
+        },
+      ],
+    },
     sections: [
       {
         id: "architecture",
@@ -373,13 +381,19 @@ export const projects: Project[] = [
       es: "Sistema en Django + React: clientes ordenan desde la app y el restaurante gestiona mesas, órdenes, empleados y operación.",
       en: "Django + React system: customers order in-app and the restaurant manages tables, orders, employees, and operations.",
     },
-    role: {
-      es: "Full-stack (backend Django, UI React)",
-      en: "Full-stack (Django backend, React UI)",
-    },
+    role: { es: "Full-stack (backend Django, UI React)", en: "Full-stack (Django backend, React UI)" },
     duration: { es: "—", en: "—" },
     stack: ["Python (Django)", "React", "PostgreSQL", "Docker"],
     links: [{ label: "github", href: "https://github.com/NicoG2023/App-Restaurante" }],
+    media: {
+      videos: [
+        {
+          kind: "mp4",
+          src: "/videos/Restaurante/AppRestaurante.mp4",
+          title: { es: "Demo del sistema", en: "System demo" },
+        },
+      ],
+    },
     sections: [
       {
         id: "features",
@@ -396,21 +410,27 @@ export const projects: Project[] = [
     id: "academic-cli",
     year: "2022",
     category: "backend",
-    title: {
-      es: "Sistema Académico CLI (C++ + estructuras desde cero)",
-      en: "Academic CLI System (C++ + data structures from scratch)",
-    },
+    title: { es: "Sistema Académico CLI (C++ + estructuras desde cero)", en: "Academic CLI System (C++ + data structures from scratch)" },
     description: {
       es: "Sistema de gestión académica en C++ (CLI) construido sin librerías modernas: estructuras de datos implementadas desde cero. Usa un árbol AVL con multilistas para gestionar notas de forma eficiente.",
       en: "Academic management system in C++ (CLI) built without modern libraries: data structures implemented from scratch. Uses an AVL tree with multilists for efficient grade management.",
     },
-    role: {
-      es: "Backend/algoritmos (diseño e implementación de estructuras de datos)",
-      en: "Backend/algorithms (data structure design & implementation)",
-    },
+    role: { es: "Backend/algoritmos (diseño e implementación de estructuras de datos)", en: "Backend/algorithms (data structure design & implementation)" },
     duration: { es: "—", en: "—" },
     stack: ["C++ (legacy standard)", "CLI", "AVL Tree", "Multilists", "File I/O"],
     links: [{ label: "github", href: "https://github.com/NicoG2023/Sistema-Academico-CLI" }],
+    media: {
+      images: [
+        {
+          src: "/images/SistemaAcademico/SistemaAcademico1.png",
+          alt: { es: "Vista del sistema", en: "System view" },
+        },
+        {
+          src: "/images/SistemaAcademico/SistemaAcademico2.png",
+          alt: { es: "Menús y reportes", en: "Menus and reports" },
+        },
+      ],
+    },
     sections: [
       {
         id: "overview",
