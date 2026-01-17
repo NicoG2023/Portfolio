@@ -17,6 +17,14 @@ export function ProjectCard({
 }) {
   const clickable = project.detailEnabled !== false && !project.comingSoon;
 
+  const cover =
+    project.media?.cover ??
+    (project.media?.images?.length ? project.media.images[0] : undefined);
+
+  const maxChips = 5;
+  const chips = project.stack.slice(0, maxChips);
+  const extra = project.stack.length - chips.length;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 10 }}
@@ -25,6 +33,20 @@ export function ProjectCard({
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       className="group rounded-2xl border border-border p-6 shadow-soft glass"
     >
+      {/* COVER */}
+      {cover && (
+        <div className="cover-media mb-5 overflow-hidden rounded-xl border border-border bg-transparent dark:bg-ink/5">
+          <div className="relative aspect-[16/9] w-full">
+            <img
+              src={cover.src}
+              alt={cover.alt[lang]}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      )}
+
       <div className="flex items-start justify-between gap-4">
         <div>
           <h3 className="text-base font-semibold tracking-tight text-text">
@@ -56,10 +78,14 @@ export function ProjectCard({
         )}
       </div>
 
-      <p className="mt-3 text-sm text-muted">{project.description[lang]}</p>
+      {/* DESCRIPTION (clamp) */}
+      <p className="mt-3 text-sm text-muted line-clamp-3">
+        {project.description[lang]}
+      </p>
 
+      {/* STACK (limit) */}
       <div className="mt-4 flex flex-wrap gap-2">
-        {project.stack.map((s) => (
+        {chips.map((s) => (
           <span
             key={s}
             className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-text"
@@ -67,6 +93,12 @@ export function ProjectCard({
             {s}
           </span>
         ))}
+
+        {extra > 0 && (
+          <span className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-muted">
+            +{extra}
+          </span>
+        )}
       </div>
 
       {project.links?.length ? (

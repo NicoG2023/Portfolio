@@ -7,26 +7,65 @@ const resources = {
       // ES
       hero: {
         badge: "Disponible para proyectos",
-        headlineA: "Construyo sistemas",
-        headlineB: "backend en Java y full-stack",
+        microProof: "Backend • Arquitectura • Sistemas reales",
+
+        headlineA: "Construyo backends",
+        headlineAccent: "que escalan",
+        headlineB: "en Java y full-stack cuando hace sentido",
+
         subtitle:
-          "Portafolio de proyectos enfocados en APIs, arquitectura limpia, microservicios cuando aplica y entregas con impacto medible.",
+          "APIs, arquitectura limpia y flujos event-driven con seguridad y observabilidad desde el día uno.",
+
         ctaPrimary: "Ver proyectos",
         ctaSecondary: "Contactarme",
-        chips: {
-          one: "Java • Spring/Quarkus",
-          two: "APIs REST • Seguridad",
-          three: "Microservicios • Eventos",
-          four: "Cloud • Docker",
+
+        highlights: {
+          arch: "Arquitectura limpia",
+          security: "Seguridad (AuthN/AuthZ)",
+          obs: "Observabilidad (logs/métricas)",
         },
+
         cardTitle: "Resumen rápido",
-        cardBody:
-          "Experiencia construyendo backends robustos: diseño de dominios, integraciones, observabilidad y buenas prácticas para producción.",
+        cardTag: "v1.0",
+
+        cardBullet1: "APIs y dominios bien modelados (DDD cuando aplica).",
+        cardBullet2: "Integraciones y eventos con enfoque en resiliencia.",
+        cardBullet3: "Listo para producción: seguridad, logs y métricas.",
+
         cardMetric1Label: "Enfoque",
         cardMetric1Value: "Backend & Arquitectura",
-        cardMetric2Label: "Stack",
-        cardMetric2Value: "Java • PostgreSQL • Docker",
+
         scroll: "Desliza para ver más",
+      },
+      stack: {
+        title: "Stack tecnológico",
+        subtitle: "Herramientas que uso para construir backends listos para producción (curado, lo principal).",
+        cta: "Ver proyectos",
+        note: "Más detalles (y herramientas específicas) dentro de cada proyecto.",
+        groups: {
+          backend: "Backend",
+          data: "Datos",
+          security: "Seguridad",
+          obs: "Observabilidad",
+          infra: "Infra / Cloud",
+          frontend: "Frontend",
+        },
+        items: {
+          java: "Java",
+          quarkus: "Quarkus",
+          spring: "Spring Boot",
+          postgres: "PostgreSQL",
+          mysql: "MySQL",
+          keycloak: "Keycloak",
+          auth: "OAuth2 / JWT",
+          prometheus: "Prometheus",
+          grafana: "Grafana",
+          docker: "Docker",
+          aws: "AWS",
+          gcp: "GCP",
+          react: "React",
+          ts: "TypeScript",
+        },
       },
       site: { brand: "Nicolás Guevara" },
       nav: { projects: "Proyectos", contact: "Contacto" },
@@ -80,26 +119,65 @@ const resources = {
       // EN
       hero: {
         badge: "Open to projects",
-        headlineA: "I build systems",
-        headlineB: "Java backends and full-stack apps",
+        microProof: "Backend • Architecture • Real systems",
+
+        headlineA: "I build backends",
+        headlineAccent: "that scale",
+        headlineB: "in Java and full-stack when it makes sense",
+
         subtitle:
-          "Portfolio focused on APIs, clean architecture, microservices when needed, and shipping with measurable impact.",
+          "APIs, clean architecture, and event-driven flows with security and observability from day one.",
+
         ctaPrimary: "View projects",
         ctaSecondary: "Contact me",
-        chips: {
-          one: "Java • Spring/Quarkus",
-          two: "REST APIs • Security",
-          three: "Microservices • Events",
-          four: "Cloud • Docker",
+
+        highlights: {
+          arch: "Clean architecture",
+          security: "Security (AuthN/AuthZ)",
+          obs: "Observability (logs/metrics)",
         },
+
         cardTitle: "Quick snapshot",
-        cardBody:
-          "Experience building production-grade backends: domain design, integrations, observability, and strong engineering practices.",
+        cardTag: "v1.0",
+
+        cardBullet1: "Well-modeled domains (DDD when it fits).",
+        cardBullet2: "Integrations and events with resilience in mind.",
+        cardBullet3: "Production-ready: security, logging, and metrics.",
+
         cardMetric1Label: "Focus",
         cardMetric1Value: "Backend & Architecture",
-        cardMetric2Label: "Stack",
-        cardMetric2Value: "Java • PostgreSQL • Docker",
+
         scroll: "Scroll to explore",
+      },
+      stack: {
+        title: "Tech stack",
+        subtitle: "Tools I use to build production-ready backends.",
+        cta: "View projects",
+        note: "More details (and project-specific tools) inside each project.",
+        groups: {
+          backend: "Backend",
+          data: "Data",
+          security: "Security",
+          obs: "Observability",
+          infra: "Infra / Cloud",
+          frontend: "Frontend",
+        },
+        items: {
+          java: "Java",
+          quarkus: "Quarkus",
+          spring: "Spring Boot",
+          postgres: "PostgreSQL",
+          mysql: "MySQL",
+          keycloak: "Keycloak",
+          auth: "OAuth2 / JWT",
+          prometheus: "Prometheus",
+          grafana: "Grafana",
+          docker: "Docker",
+          aws: "AWS",
+          gcp: "GCP",
+          react: "React",
+          ts: "TypeScript",
+        },
       },
       site: { brand: "Nicolás Guevara" },
       nav: { projects: "Projects", contact: "Contact" },

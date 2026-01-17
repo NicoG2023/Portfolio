@@ -41,6 +41,7 @@ export type ProjectSection = {
 };
 
 export type ProjectMedia = {
+  cover?: { src: string; alt: { es: string; en: string } };
   images?: { src: string; alt: { es: string; en: string } }[];
   videos?: {
     kind: "youtube" | "vimeo" | "mp4";
@@ -79,6 +80,7 @@ export const projects: Project[] = [
       { label: { es: "UI", en: "UI" }, value: { es: "React", en: "React" } },
     ],
     media: {
+      cover: {src: "/images/CinemaSystem/CoverCinema.png", alt: {es: "Vista del sistema", en: "System view"}},
       videos: [
         {
           kind: "mp4",
@@ -166,6 +168,7 @@ export const projects: Project[] = [
       { label: { es: "Enfoque", en: "Focus" }, value: { es: "Proyecto completo", en: "End-to-end build" } },
     ],
     media: {
+      cover: {src: "/images/AppProbabilidad/CoverProbabilidad.png", alt: { es: "Vista del sistema", en: "System view"}},
       videos: [
         {
           kind: "mp4",
@@ -222,7 +225,6 @@ export const projects: Project[] = [
     stack: ["Java (Quarkus)", "React", "Keycloak", "Kafka", "PostgreSQL", "Prometheus", "Grafana", "Alertmanager", "Docker", "CI/CD"],
     links: [
       { label: "github", href: "https://github.com/tuusuario/tu-repo" },
-      { label: "demo", href: "https://tu-demo.vercel.app" },
     ],
     metrics: [
       { label: { es: "Arquitectura", en: "Architecture" }, value: { es: "Monolito modular + microservicio", en: "Modular monolith + microservice" } },
@@ -230,6 +232,7 @@ export const projects: Project[] = [
       { label: { es: "Observabilidad", en: "Observability" }, value: { es: "Prometheus + Grafana + Alertmanager", en: "Prometheus + Grafana + Alertmanager" } },
     ],
     media: {
+      cover: {src: "/images/AccessSystem/CoverAccessSystem.png", alt: { es: "Vista del sistema", en: "System view"}},
       images: [
         { src: "/images/access-1.png", alt: { es: "Pantalla principal", en: "Main screen" } },
         { src: "/images/access-2.png", alt: { es: "Historial de accesos", en: "Access history" } },
@@ -292,6 +295,7 @@ export const projects: Project[] = [
     stack: ["Java (Quarkus)", "Vue", "PostgreSQL", "Docker", "Integrations"],
     links: [{ label: "github", href: "https://github.com/EngJuanSER/ASNs-Security/tree/main/Proyect" }],
     media: {
+      cover: {src: "/images/Diagseg/CoverDiagseg.png", alt: {es: "Vista del sistema", en: "System view"}},
       videos: [
         {
           kind: "mp4",
@@ -334,6 +338,7 @@ export const projects: Project[] = [
     stack: ["Node.js (Express)", "Kafka", "React", "PostgreSQL", "Docker"],
     links: [{ label: "github", href: "https://github.com/NicoG2023/Artesanias_Bogota_Ltda" }],
     media: {
+      cover: {src: "/images/Artesanias Bogota/CoverArtesanias.png", alt: {es: "Vista del sistema", en: "System view"}},
       videos: [
         {
           kind: "mp4",
@@ -386,6 +391,7 @@ export const projects: Project[] = [
     stack: ["Python (Django)", "React", "PostgreSQL", "Docker"],
     links: [{ label: "github", href: "https://github.com/NicoG2023/App-Restaurante" }],
     media: {
+      cover: {src: "/images/AppRestaurante/CoverAppRestaurante.png", alt: {es: "Vista del sistema", en: "System view"}},
       videos: [
         {
           kind: "mp4",

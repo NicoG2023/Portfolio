@@ -28,7 +28,6 @@ body {
 
 /* =========================
    BACKGROUND (píntalo en BODY)
-   - Esto evita “cortes” por canvas/propagation en algunos casos
    ========================= */
 
 body {
@@ -36,22 +35,18 @@ body {
   background-color: rgb(var(--bg));
   overflow-x: hidden;
 
-  /* Importante: fija el background para evitar tiles raros al scrollear/zoomear */
   background-attachment: fixed;
 
   background-image:
-    /* grid suave */
     radial-gradient(rgb(var(--accent) / 0.10) 1px, transparent 1px),
     radial-gradient(rgb(var(--accent) / 0.06) 0.8px, transparent 0.8px),
 
-    /* blobs */
     radial-gradient(900px 520px at 18% 12%, rgb(var(--crimson) / 0.10), transparent 70%),
     radial-gradient(820px 520px at 54% 0%, rgb(var(--accent) / 0.12), transparent 66%),
     radial-gradient(760px 520px at 88% 36%, rgb(var(--crimson) / 0.08), transparent 68%),
     radial-gradient(900px 600px at 22% 92%, rgb(var(--accent) / 0.09), transparent 74%),
     radial-gradient(900px 600px at 84% 96%, rgb(var(--accent) / 0.07), transparent 72%),
 
-    /* vignette suave */
     radial-gradient(circle at 50% 50%, transparent 55%, rgb(var(--ink) / 0.05) 100%);
 
   background-size:
@@ -77,23 +72,25 @@ body {
   background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
 }
 
-/* Dark mode: sigue pintando en BODY */
-html.dark body,
-body.dark {
+/* =========================
+   DARK MODE (SOLO html.dark)
+   ========================= */
+
+html.dark body {
   background-color: rgb(var(--bg));
   background-attachment: fixed;
 
   background-image:
-    radial-gradient(rgb(var(--accent) / 0.085) 0.9px, transparent 0.9px),
-    radial-gradient(rgb(var(--accent) / 0.055) 0.8px, transparent 0.8px),
+    radial-gradient(rgb(var(--accent) / 0.060) 0.9px, transparent 0.9px),
+    radial-gradient(rgb(var(--accent) / 0.035) 0.8px, transparent 0.8px),
 
-    radial-gradient(900px 520px at 18% 12%, rgb(var(--crimson) / 0.10), transparent 70%),
-    radial-gradient(820px 520px at 54% 0%, rgb(var(--accent) / 0.14), transparent 66%),
-    radial-gradient(760px 520px at 88% 36%, rgb(var(--crimson) / 0.09), transparent 68%),
-    radial-gradient(900px 600px at 22% 92%, rgb(var(--accent) / 0.10), transparent 74%),
-    radial-gradient(900px 600px at 84% 96%, rgb(var(--accent) / 0.08), transparent 72%),
+    radial-gradient(900px 520px at 18% 12%, rgb(var(--crimson) / 0.08), transparent 70%),
+    radial-gradient(820px 520px at 54% 0%, rgb(var(--accent) / 0.10), transparent 66%),
+    radial-gradient(760px 520px at 88% 36%, rgb(var(--crimson) / 0.07), transparent 68%),
+    radial-gradient(900px 600px at 22% 92%, rgb(var(--accent) / 0.08), transparent 74%),
+    radial-gradient(900px 600px at 84% 96%, rgb(var(--accent) / 0.06), transparent 72%),
 
-    radial-gradient(circle at 50% 55%, transparent 45%, rgb(0 0 0 / 0.55) 100%);
+    radial-gradient(circle at 50% 55%, transparent 52%, rgb(0 0 0 / 0.35) 100%);
 
   background-size:
     26px 26px,
@@ -118,19 +115,14 @@ body.dark {
   background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
 }
 
-/* ✅ IMPORTANTE: apagamos overlays viejos */
-body::after {
-  content: none !important;
-}
-html.dark body::after,
-body.dark::after {
+/* No after overlay (en ambos) */
+body::after,
+html.dark body::after {
   content: none !important;
 }
 
 /* =========================
-   GRAIN / FILM OVERLAY (SIN mix-blend-mode)
-   - mix-blend-mode + fixed suele crear “seams” que cambian con zoom.
-   - dejamos solo opacity normal.
+   GRAIN / FILM OVERLAY
    ========================= */
 
 @keyframes grainShift {
@@ -144,14 +136,12 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0; /* encima del background, debajo del contenido */
+  z-index: 0;
 
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
   opacity: 0.10;
 
-  /* clave: NO blend */
   mix-blend-mode: normal;
-
   animation: grainShift 18s steps(2) infinite;
   will-change: transform;
 }
@@ -162,22 +152,22 @@ body::before {
   z-index: 1;
 }
 
-/* Chromium perf */
 html.chromium body::before {
   animation: none !important;
   opacity: 0.07;
 }
 
-/* Dark tuning */
-html.dark body::before,
-body.dark::before {
-  opacity: 0.11;
-  mix-blend-mode: normal;
+html.dark body::before {
+  opacity: 0.085;
 }
 
-html.chromium.dark body::before,
-html.chromium body.dark::before {
+html.chromium.dark body::before {
   opacity: 0.08;
+}
+
+/* ✅ Light tuning del grain */
+html:not(.dark) body::before {
+  opacity: 0.06;
 }
 
 /* =========================
@@ -185,28 +175,23 @@ html.chromium body.dark::before {
    ========================= */
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  body::before {
-    animation: none !important;
-  }
+  html { scroll-behavior: auto; }
+  body::before { animation: none !important; }
+  * { animation: none !important; transition: none !important; }
 }
 
 /* =========================
-   (Opcional) Animaciones blobs
+   Blob animations (si las usas en clases)
    ========================= */
 
 @keyframes blobFloatY {
   0%, 100% { transform: translate3d(-50%, 0, 0) scale(1); }
   50% { transform: translate3d(-50%, -18px, 0) scale(1.03); }
 }
-
 @keyframes blobFloatYPlain {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
   50% { transform: translate3d(0, -16px, 0) scale(1.025); }
 }
-
 @keyframes blobDriftXPlain {
   0%, 100% { transform: translate3d(0, 0, 0); }
   50% { transform: translate3d(16px, 0, 0); }
@@ -220,44 +205,53 @@ html.chromium body.dark::before {
 .bg-delay-2 { animation-delay: -18s; }
 .bg-delay-3 { animation-delay: -27s; }
 
-@media (prefers-reduced-motion: reduce) {
-  .bg-blob-float-center,
-  .bg-blob-float,
-  .bg-blob-drift {
-    animation: none !important;
-  }
-}
-
-/* =========================
-   UPDATE: SLOW DEVICES
-   ========================= */
-
 @media (update: slow) {
-  body::before {
-    animation: none !important;
-  }
+  body::before { animation: none !important; }
   .bg-blob-float-center,
   .bg-blob-float,
-  .bg-blob-drift {
-    animation: none !important;
-  }
+  .bg-blob-drift { animation: none !important; }
 }
 
 /* =========================
-   GLASS (performance-friendly)
+   GLASS
    ========================= */
 
 .glass {
-  background-color: rgb(var(--surface) / 0.72);
+  background-color: rgb(var(--surface) / 0.78);
   border: 1px solid rgb(var(--border));
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.08);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.10);
+
+  transition:
+    transform 300ms cubic-bezier(.16,1,.3,1),
+    box-shadow 300ms cubic-bezier(.16,1,.3,1);
+}
+
+html:not(.dark) .glass {
+  background-color: rgb(var(--surface) / 0.92);
+}
+
+html.dark .glass {
+  border-color: rgb(var(--border) / 1);
+  box-shadow:
+    0 18px 50px rgb(0 0 0 / 0.35),
+    0 0 0 1px rgb(255 255 255 / 0.03) inset;
+}
+
+.glass:hover {
+  transform: translateY(-2px);
 }
 
 @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .glass {
-    background-color: rgb(var(--surface) / 0.60);
+    background-color: rgb(var(--surface) / 0.70);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+  }
+
+  html.dark .glass {
+    background-color: rgb(var(--surface) / 0.84);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
   }
 }
 
@@ -281,20 +275,111 @@ html.chromium .bg-bg\/25 {
   background-color: rgb(var(--surface) / 0.80) !important;
 }
 
-/* =========================================
-   Content Visibility helpers (perf)
-   ========================================= */
+/* =========================
+   Content Visibility helpers
+   ========================= */
 
 .cv-auto {
   content-visibility: auto;
   contain-intrinsic-size: 1px 900px;
 }
-
 .cv-visible {
   content-visibility: visible;
   contain-intrinsic-size: auto;
 }
-
 .contain-paint {
   contain: layout paint;
+}
+
+/* Mobile: evita fixed (SOLO html.dark) */
+@media (max-width: 768px) {
+  body,
+  html.dark body {
+    background-attachment: scroll;
+  }
+}
+
+/* =========================
+   SIGNATURE: Gold Dust Sweep
+   ========================= */
+
+@keyframes goldSweep {
+  0%   { transform: translateX(-140%) skewX(-16deg); opacity: 0; }
+  12%  { opacity: 1; }
+  60%  { opacity: 0.85; }
+  100% { transform: translateX(140%) skewX(-16deg); opacity: 0; }
+}
+
+.sig-gold {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.sig-gold::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: 0;
+  pointer-events: none;
+
+  background: linear-gradient(
+    110deg,
+    transparent 38%,
+    rgb(var(--accent) / 0.00) 45%,
+    rgb(var(--accent) / 0.28) 50%,
+    rgb(var(--accent) / 0.00) 55%,
+    transparent 62%
+  );
+
+  opacity: 0;
+  transform: translateX(-140%) skewX(-16deg);
+  filter: blur(0.2px);
+}
+
+.sig-gold > * {
+  position: relative;
+  z-index: 1;
+}
+
+.sig-gold:hover::after,
+.sig-gold:focus-visible::after {
+  animation: goldSweep 780ms cubic-bezier(.16,1,.3,1) both;
+}
+
+.sig-gold:hover,
+.sig-gold:focus-visible {
+  box-shadow:
+    0 0 0 1px rgb(var(--accent) / 0.18),
+    0 18px 50px rgb(0 0 0 / 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sig-gold::after { animation: none !important; }
+}
+
+/* =========================
+   ✅ COVERS sin NADA encima en LIGHT
+   ========================= */
+
+.cover-media {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Blindaje: que ninguna pseudo-capa aparezca en Light */
+html:not(.dark) .cover-media::before,
+html:not(.dark) .cover-media::after,
+html:not(.dark) .cover-media > *::before,
+html:not(.dark) .cover-media > *::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Asegura que el media no hereda filtros/mezclas */
+html:not(.dark) .cover-media img,
+html:not(.dark) .cover-media video {
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
 }

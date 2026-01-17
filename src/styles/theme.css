@@ -1,5 +1,5 @@
 :root {
-  --bg: 250 248 245;        /* #FAF8F5 */
+  --bg: var(--paper-warm);
   --surface: 255 253 248;   /* antes 255 255 255 (un pelín más “museo”) */
   --text: 17 17 22;
   --muted: 92 92 110;
@@ -16,19 +16,20 @@
 
 
 .dark {
-  /* MJ-02 — Obsidian & Gold Dust (Dark) */
-  --bg: 7 7 12;             /* #07070C */
-  --surface: 18 18 26;      /* #12121A */
-  --text: 248 246 242;      /* #F8F6F2 */
-  --muted: 184 180 170;     /* #B8B4AA */
-  --border: 44 44 58;       /* #2C2C3A */
+  /* Obsidian & Gold Dust — tuned (less dark) */
+  --bg: 11 12 18;          /* antes 7 7 12 */
+  --surface: 22 24 34;     /* antes 18 18 26 */
+  --text: 248 246 242;
+  --muted: 190 186 176;    /* un pelín más legible */
+  --border: 58 60 74;      /* más visible en dark */
 
-  --primary: 248 246 242;   /* #F8F6F2 */
-  --secondary: 184 180 170; /* #B8B4AA */
-  --accent: 212 170 92;     /* #D4AA5C - oro más visible */
-  --crimson: 214 70 88; /* #D64658 */
+  --primary: 248 246 242;
+  --secondary: 190 186 176;
 
-  --shadow: 0 0 0;
-  --paper-warm: 20 18 16;          /* apenas cálido */
+  --accent: 212 170 92;    /* se mantiene */
+  --crimson: 214 70 88;    /* se mantiene */
+
+  --paper-warm: 24 22 20;
   --ink: 0 0 0;
 }
+

@@ -17,6 +17,14 @@ export function FeaturedProjectCard({
 }) {
   const clickable = project.detailEnabled !== false && !project.comingSoon;
 
+  const cover =
+    project.media?.cover ??
+    (project.media?.images?.length ? project.media.images[0] : undefined);
+
+  const maxChips = 6;
+  const chips = project.stack.slice(0, maxChips);
+  const extra = project.stack.length - chips.length;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 12 }}
@@ -28,6 +36,27 @@ export function FeaturedProjectCard({
       <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-accent/15 blur-3xl" />
 
       <div className="relative">
+        {/* COVER */}
+        {cover && (
+          <div className="mb-5 overflow-hidden rounded-xl border border-border bg-bg/20">
+            <div className="relative aspect-[16/9] w-full">
+              <img
+                src={cover.src}
+                alt={cover.alt[lang]}
+                className="h-full w-full object-cover"
+                loading="lazy"
+              />
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgb(var(--bg)/0.0) 0%, rgb(var(--bg)/0.35) 55%, rgb(var(--bg)/0.78) 100%)",
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs text-muted">
@@ -61,10 +90,14 @@ export function FeaturedProjectCard({
           </span>
         </div>
 
-        <p className="mt-3 text-sm text-muted">{project.description[lang]}</p>
+        {/* DESCRIPTION (clamp) */}
+        <p className="mt-3 text-sm text-muted line-clamp-2">
+          {project.description[lang]}
+        </p>
 
+        {/* STACK (limit) */}
         <div className="mt-4 flex flex-wrap gap-2">
-          {project.stack.slice(0, 8).map((s) => (
+          {chips.map((s) => (
             <span
               key={s}
               className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-text"
@@ -72,6 +105,12 @@ export function FeaturedProjectCard({
               {s}
             </span>
           ))}
+
+          {extra > 0 && (
+            <span className="rounded-full border border-border bg-bg/25 px-3 py-1 text-xs text-muted">
+              +{extra}
+            </span>
+          )}
         </div>
 
         {project.links?.length ? (
